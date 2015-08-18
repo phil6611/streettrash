@@ -147,8 +147,9 @@ function onLocationFound(e) {
 }
 function onLocationError(e) {
     alert(e.message);
+    map.stopLocate();
 }
 
 map.on('locationfound', onLocationFound);
 map.on('locationerror', onLocationError);
-map.locate({setView: true, maxZoom: 18});
+map.locate({watch: true, setView: true, maxZoom: 18});
