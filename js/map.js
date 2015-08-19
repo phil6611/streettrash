@@ -59,6 +59,27 @@ glass = L.layerJSON({
 	}
 });
 
+//Composteurs collectifs ou non
+var green;
+
+green = L.layerJSON({
+	url: 'http://overpass-api.de/api/interpreter?data=[out:json];node({lat1},{lon1},{lat2},{lon2})[amenity=recycling]["recycling:green_waste"];out;',
+	propertyItems: 'elements',
+	propertyTitle: 'tags.name',
+	propertyLoc: ['lat','lon'],
+	buildPopup: function(data, marker) {
+		return data.tags.name || null;
+	},
+	buildIcon: function(data, title) {
+	  return new L.Icon({
+	    iconUrl:'./images/recycling.png',
+	    iconSize: new L.Point(16, 16),
+	    iconAnchor: new L.Point(1, 16),
+	    popupAnchor: new L.Point(0, -16)
+	  });
+	}
+});
+
 //Conteneurs à ordures ménagères
 var waste;
 
@@ -113,7 +134,7 @@ var map = L.map('map', {
     center: new L.LatLng(42.698611, 2.895556),
     zoom: 15,
     maxZoom: 18,
-    layers: [mapbox, waste, paper, glass, basket]
+    layers: [mapbox, green, waste, paper, glass, basket]
 });
 
 /*
@@ -127,6 +148,7 @@ var baseMap = {
 
 //Contrôles pour les layers contenant les données.
 var overlaysMaps = {
+    "Composteurs" : green,
     "Ordures ménagères" : waste,
     "Papier" : paper,
     "Verre" : glass,
