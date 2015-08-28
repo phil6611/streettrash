@@ -101,6 +101,27 @@ waste = L.layerJSON({
 	}
 });
 
+//Conteneurs à pour le textile
+var clothes;
+
+clothes = L.layerJSON({
+	url: 'http://overpass-api.de/api/interpreter?data=[out:json];node({lat1},{lon1},{lat2},{lon2})[amenity=recycling]["recycling:clothes"];out;',
+	propertyItems: 'elements',
+	propertyTitle: 'tags.name',
+	propertyLoc: ['lat','lon'],
+	buildPopup: function(data, marker) {
+		return data.tags.name || null;
+	},
+	buildIcon: function(data, title) {
+	  return new L.Icon({
+	    iconUrl:'./images/recycling.png',
+	    iconSize: new L.Point(16, 16),
+	    iconAnchor: new L.Point(1, 16),
+	    popupAnchor: new L.Point(0, -16)
+	  });
+	}
+});
+
 //Corbeille pour les petits déchets.
 basket = L.layerJSON({
 	url: 'http://overpass-api.de/api/interpreter?data=[out:json];node({lat1},{lon1},{lat2},{lon2})[amenity=waste_basket];out;',
@@ -134,7 +155,7 @@ var map = L.map('map', {
     center: new L.LatLng(42.698611, 2.895556),
     zoom: 15,
     maxZoom: 18,
-    layers: [mapbox, green, waste, paper, glass, basket]
+    layers: [mapbox, green, waste, paper, clothes, glass, basket]
 });
 
 /*
@@ -151,6 +172,7 @@ var overlaysMaps = {
     "Composteurs" : green,
     "Ordures ménagères" : waste,
     "Papier" : paper,
+    "Textiles" : clothes,
     "Verre" : glass,
     "Corbeilles" : basket
 };
